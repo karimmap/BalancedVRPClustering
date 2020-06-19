@@ -1,0 +1,7 @@
+# compilation files
+clustering.o
+clustering
+
+# protbuf files
+problem_pb.rb
+problem.pb.*
