@@ -74,10 +74,17 @@ namespace operations_research {
 
     compatibleVehicle(problem);
     vector<double> duration_from_and_to_depot = Compute_distance_from_and_to_depot(problem);
-    for(auto i:problem.services())
-    {
-      cout << duration_from_and_to_depot[i.id()] << endl;
-    }
+    // for(auto i:problem.services())
+    // {
+    //   cout << duration_from_and_to_depot[i.id()] << endl;
+    // }
+    for (auto service : problem.services())
+      cout << service.ShortDebugString() << endl;
+    cout << endl; cout << endl;
+    for (auto service : problem.vehicles())
+      cout << service.ShortDebugString() << endl;
+    double cut_ratio;
+    Compute_limits(problem,cut_ratio);
   }
 } // namespace operations_research
 

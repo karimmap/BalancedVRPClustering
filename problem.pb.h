@@ -517,6 +517,7 @@ class Service :
     kCompatibleVehicleIndicesFieldNumber = 4,
     kSkillsFieldNumber = 5,
     kDayIndicesFieldNumber = 6,
+    kUnitLabelsFieldNumber = 11,
     kNameFieldNumber = 9,
     kLocationFieldNumber = 7,
     kDurationFieldNumber = 2,
@@ -613,6 +614,30 @@ class Service :
   ::PROTOBUF_NAMESPACE_ID::RepeatedField< ::PROTOBUF_NAMESPACE_ID::int32 >*
       mutable_day_indices();
 
+  // repeated string unit_labels = 11;
+  int unit_labels_size() const;
+  private:
+  int _internal_unit_labels_size() const;
+  public:
+  void clear_unit_labels();
+  const std::string& unit_labels(int index) const;
+  std::string* mutable_unit_labels(int index);
+  void set_unit_labels(int index, const std::string& value);
+  void set_unit_labels(int index, std::string&& value);
+  void set_unit_labels(int index, const char* value);
+  void set_unit_labels(int index, const char* value, size_t size);
+  std::string* add_unit_labels();
+  void add_unit_labels(const std::string& value);
+  void add_unit_labels(std::string&& value);
+  void add_unit_labels(const char* value);
+  void add_unit_labels(const char* value, size_t size);
+  const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<std::string>& unit_labels() const;
+  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<std::string>* mutable_unit_labels();
+  private:
+  const std::string& _internal_unit_labels(int index) const;
+  std::string* _internal_add_unit_labels();
+  public:
+
   // string name = 9;
   void clear_name();
   const std::string& name() const;
@@ -683,6 +708,7 @@ class Service :
   ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<std::string> skills_;
   ::PROTOBUF_NAMESPACE_ID::RepeatedField< ::PROTOBUF_NAMESPACE_ID::int32 > day_indices_;
   mutable std::atomic<int> _day_indices_cached_byte_size_;
+  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<std::string> unit_labels_;
   ::PROTOBUF_NAMESPACE_ID::internal::ArenaStringPtr name_;
   ::problem::Location* location_;
   float duration_;
@@ -1345,6 +1371,7 @@ class Problem :
     kVehiclesFieldNumber = 1,
     kServicesFieldNumber = 2,
     kMatricesFieldNumber = 3,
+    kUnitLabelsFieldNumber = 5,
     kSolutionsFieldNumber = 4,
   };
   // repeated .problem.Vehicle vehicles = 1;
@@ -1401,6 +1428,30 @@ class Problem :
   const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::problem::Matrix >&
       matrices() const;
 
+  // repeated string unit_labels = 5;
+  int unit_labels_size() const;
+  private:
+  int _internal_unit_labels_size() const;
+  public:
+  void clear_unit_labels();
+  const std::string& unit_labels(int index) const;
+  std::string* mutable_unit_labels(int index);
+  void set_unit_labels(int index, const std::string& value);
+  void set_unit_labels(int index, std::string&& value);
+  void set_unit_labels(int index, const char* value);
+  void set_unit_labels(int index, const char* value, size_t size);
+  std::string* add_unit_labels();
+  void add_unit_labels(const std::string& value);
+  void add_unit_labels(std::string&& value);
+  void add_unit_labels(const char* value);
+  void add_unit_labels(const char* value, size_t size);
+  const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<std::string>& unit_labels() const;
+  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<std::string>* mutable_unit_labels();
+  private:
+  const std::string& _internal_unit_labels(int index) const;
+  std::string* _internal_add_unit_labels();
+  public:
+
   // .problem.Solution solutions = 4;
   bool has_solutions() const;
   private:
@@ -1424,6 +1475,7 @@ class Problem :
   ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::problem::Vehicle > vehicles_;
   ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::problem::Service > services_;
   ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField< ::problem::Matrix > matrices_;
+  ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<std::string> unit_labels_;
   ::problem::Solution* solutions_;
   mutable ::PROTOBUF_NAMESPACE_ID::internal::CachedSize _cached_size_;
   friend struct ::TableStruct_problem_2eproto;
@@ -1994,6 +2046,80 @@ inline void Service::_internal_set_id(::PROTOBUF_NAMESPACE_ID::uint32 value) {
 inline void Service::set_id(::PROTOBUF_NAMESPACE_ID::uint32 value) {
   _internal_set_id(value);
   // @@protoc_insertion_point(field_set:problem.Service.id)
+}
+
+// repeated string unit_labels = 11;
+inline int Service::_internal_unit_labels_size() const {
+  return unit_labels_.size();
+}
+inline int Service::unit_labels_size() const {
+  return _internal_unit_labels_size();
+}
+inline void Service::clear_unit_labels() {
+  unit_labels_.Clear();
+}
+inline std::string* Service::add_unit_labels() {
+  // @@protoc_insertion_point(field_add_mutable:problem.Service.unit_labels)
+  return _internal_add_unit_labels();
+}
+inline const std::string& Service::_internal_unit_labels(int index) const {
+  return unit_labels_.Get(index);
+}
+inline const std::string& Service::unit_labels(int index) const {
+  // @@protoc_insertion_point(field_get:problem.Service.unit_labels)
+  return _internal_unit_labels(index);
+}
+inline std::string* Service::mutable_unit_labels(int index) {
+  // @@protoc_insertion_point(field_mutable:problem.Service.unit_labels)
+  return unit_labels_.Mutable(index);
+}
+inline void Service::set_unit_labels(int index, const std::string& value) {
+  // @@protoc_insertion_point(field_set:problem.Service.unit_labels)
+  unit_labels_.Mutable(index)->assign(value);
+}
+inline void Service::set_unit_labels(int index, std::string&& value) {
+  // @@protoc_insertion_point(field_set:problem.Service.unit_labels)
+  unit_labels_.Mutable(index)->assign(std::move(value));
+}
+inline void Service::set_unit_labels(int index, const char* value) {
+  GOOGLE_DCHECK(value != nullptr);
+  unit_labels_.Mutable(index)->assign(value);
+  // @@protoc_insertion_point(field_set_char:problem.Service.unit_labels)
+}
+inline void Service::set_unit_labels(int index, const char* value, size_t size) {
+  unit_labels_.Mutable(index)->assign(
+    reinterpret_cast<const char*>(value), size);
+  // @@protoc_insertion_point(field_set_pointer:problem.Service.unit_labels)
+}
+inline std::string* Service::_internal_add_unit_labels() {
+  return unit_labels_.Add();
+}
+inline void Service::add_unit_labels(const std::string& value) {
+  unit_labels_.Add()->assign(value);
+  // @@protoc_insertion_point(field_add:problem.Service.unit_labels)
+}
+inline void Service::add_unit_labels(std::string&& value) {
+  unit_labels_.Add(std::move(value));
+  // @@protoc_insertion_point(field_add:problem.Service.unit_labels)
+}
+inline void Service::add_unit_labels(const char* value) {
+  GOOGLE_DCHECK(value != nullptr);
+  unit_labels_.Add()->assign(value);
+  // @@protoc_insertion_point(field_add_char:problem.Service.unit_labels)
+}
+inline void Service::add_unit_labels(const char* value, size_t size) {
+  unit_labels_.Add()->assign(reinterpret_cast<const char*>(value), size);
+  // @@protoc_insertion_point(field_add_pointer:problem.Service.unit_labels)
+}
+inline const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<std::string>&
+Service::unit_labels() const {
+  // @@protoc_insertion_point(field_list:problem.Service.unit_labels)
+  return unit_labels_;
+}
+inline ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<std::string>*
+Service::mutable_unit_labels() {
+  // @@protoc_insertion_point(field_mutable_list:problem.Service.unit_labels)
+  return &unit_labels_;
 }
 
 // -------------------------------------------------------------------
@@ -2654,6 +2780,80 @@ inline void Problem::set_allocated_solutions(::problem::Solution* solutions) {
   }
   solutions_ = solutions;
   // @@protoc_insertion_point(field_set_allocated:problem.Problem.solutions)
+}
+
+// repeated string unit_labels = 5;
+inline int Problem::_internal_unit_labels_size() const {
+  return unit_labels_.size();
+}
+inline int Problem::unit_labels_size() const {
+  return _internal_unit_labels_size();
+}
+inline void Problem::clear_unit_labels() {
+  unit_labels_.Clear();
+}
+inline std::string* Problem::add_unit_labels() {
+  // @@protoc_insertion_point(field_add_mutable:problem.Problem.unit_labels)
+  return _internal_add_unit_labels();
+}
+inline const std::string& Problem::_internal_unit_labels(int index) const {
+  return unit_labels_.Get(index);
+}
+inline const std::string& Problem::unit_labels(int index) const {
+  // @@protoc_insertion_point(field_get:problem.Problem.unit_labels)
+  return _internal_unit_labels(index);
+}
+inline std::string* Problem::mutable_unit_labels(int index) {
+  // @@protoc_insertion_point(field_mutable:problem.Problem.unit_labels)
+  return unit_labels_.Mutable(index);
+}
+inline void Problem::set_unit_labels(int index, const std::string& value) {
+  // @@protoc_insertion_point(field_set:problem.Problem.unit_labels)
+  unit_labels_.Mutable(index)->assign(value);
+}
+inline void Problem::set_unit_labels(int index, std::string&& value) {
+  // @@protoc_insertion_point(field_set:problem.Problem.unit_labels)
+  unit_labels_.Mutable(index)->assign(std::move(value));
+}
+inline void Problem::set_unit_labels(int index, const char* value) {
+  GOOGLE_DCHECK(value != nullptr);
+  unit_labels_.Mutable(index)->assign(value);
+  // @@protoc_insertion_point(field_set_char:problem.Problem.unit_labels)
+}
+inline void Problem::set_unit_labels(int index, const char* value, size_t size) {
+  unit_labels_.Mutable(index)->assign(
+    reinterpret_cast<const char*>(value), size);
+  // @@protoc_insertion_point(field_set_pointer:problem.Problem.unit_labels)
+}
+inline std::string* Problem::_internal_add_unit_labels() {
+  return unit_labels_.Add();
+}
+inline void Problem::add_unit_labels(const std::string& value) {
+  unit_labels_.Add()->assign(value);
+  // @@protoc_insertion_point(field_add:problem.Problem.unit_labels)
+}
+inline void Problem::add_unit_labels(std::string&& value) {
+  unit_labels_.Add(std::move(value));
+  // @@protoc_insertion_point(field_add:problem.Problem.unit_labels)
+}
+inline void Problem::add_unit_labels(const char* value) {
+  GOOGLE_DCHECK(value != nullptr);
+  unit_labels_.Add()->assign(value);
+  // @@protoc_insertion_point(field_add_char:problem.Problem.unit_labels)
+}
+inline void Problem::add_unit_labels(const char* value, size_t size) {
+  unit_labels_.Add()->assign(reinterpret_cast<const char*>(value), size);
+  // @@protoc_insertion_point(field_add_pointer:problem.Problem.unit_labels)
+}
+inline const ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<std::string>&
+Problem::unit_labels() const {
+  // @@protoc_insertion_point(field_list:problem.Problem.unit_labels)
+  return unit_labels_;
+}
+inline ::PROTOBUF_NAMESPACE_ID::RepeatedPtrField<std::string>*
+Problem::mutable_unit_labels() {
+  // @@protoc_insertion_point(field_mutable_list:problem.Problem.unit_labels)
+  return &unit_labels_;
 }
 
 #ifdef __GNUC__

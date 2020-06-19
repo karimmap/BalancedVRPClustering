@@ -24,6 +24,7 @@ Google::Protobuf::DescriptorPool.generated_pool.build do
       optional :location, :message, 7, "problem.Location"
       optional :name, :string, 9
       optional :id, :uint32, 10
+      repeated :unit_labels, :string, 11
     end
     add_message "problem.Capacity" do
       optional :limit, :float, 1
@@ -47,6 +48,7 @@ Google::Protobuf::DescriptorPool.generated_pool.build do
       repeated :services, :message, 2, "problem.Service"
       repeated :matrices, :message, 3, "problem.Matrix"
       optional :solutions, :message, 4, "problem.Solution"
+      repeated :unit_labels, :string, 5
     end
   end
 end

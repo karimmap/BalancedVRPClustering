@@ -78,3 +78,45 @@ auto Compute_distance_from_and_to_depot(problem::Problem& problem) -> std::vecto
   return duration_from_and_to_depot;
 }
 
+auto Compute_limits(problem::Problem& problem, double cut_ratio) -> void
+{
+    for( int u = 0; u < problem.services(0).unit_labels_size();++u){
+        problem.add_unit_labels(problem.services(0).unit_labels(u));
+    }
+
+
+    for(int i = 0; i < problem.unit_labels_size(); ++i){
+        std::cout << problem.unit_labels(i) << std::endl;
+    }
+}
+//  def compute_limits(cut_symbol, cut_ratio, vehicles_infos, data_items, entity = :vehicle)
+//     cumulated_metrics = Hash.new(0)
+
+//     (@unit_symbols || [cut_symbol]).each{ |unit|
+//       cumulated_metrics[unit] = data_items.collect{ |item| item[3][unit] || 0 }.reduce(&:+)
+//     }
+
+//     strict_limits = if vehicles_infos.none?{ |v_i| v_i[:capacities] }
+//       []
+//     else
+//       vehicles_infos.collect{ |cluster|
+//         s_l = { duration: cluster[:total_work_time], visits: cumulated_metrics[:visits] }
+//         cumulated_metrics.each{ |unit, _total_metric|
+//           s_l[unit] = ((cluster[:capacities].has_key? unit) ? cluster[:capacities][unit] : 0)
+//         }
+//         s_l
+//       }
+//     end
+
+//     total_work_time = vehicles_infos.map{ |cluster| cluster[:total_work_time] }.reduce(&:+).to_f
+//     metric_limits = if entity == :vehicle && total_work_time.positive?
+//       vehicles_infos.collect{ |cluster|
+//         { limit: cut_ratio * (cumulated_metrics[cut_symbol].to_f * (cluster[:total_work_time] / total_work_time)) }
+//       }
+//     else
+//       { limit: cut_ratio * (cumulated_metrics[cut_symbol] / vehicles_infos.size) }
+//     end
+
+//     [strict_limits, metric_limits]
+//   end
+// end

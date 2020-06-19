@@ -189,6 +189,7 @@ const ::PROTOBUF_NAMESPACE_ID::uint32 TableStruct_problem_2eproto::offsets[] PRO
   PROTOBUF_FIELD_OFFSET(::problem::Service, location_),
   PROTOBUF_FIELD_OFFSET(::problem::Service, name_),
   PROTOBUF_FIELD_OFFSET(::problem::Service, id_),
+  PROTOBUF_FIELD_OFFSET(::problem::Service, unit_labels_),
   ~0u,  // no _has_bits_
   PROTOBUF_FIELD_OFFSET(::problem::Capacity, _internal_metadata_),
   ~0u,  // no _extensions_
@@ -224,15 +225,16 @@ const ::PROTOBUF_NAMESPACE_ID::uint32 TableStruct_problem_2eproto::offsets[] PRO
   PROTOBUF_FIELD_OFFSET(::problem::Problem, services_),
   PROTOBUF_FIELD_OFFSET(::problem::Problem, matrices_),
   PROTOBUF_FIELD_OFFSET(::problem::Problem, solutions_),
+  PROTOBUF_FIELD_OFFSET(::problem::Problem, unit_labels_),
 };
 static const ::PROTOBUF_NAMESPACE_ID::internal::MigrationSchema schemas[] PROTOBUF_SECTION_VARIABLE(protodesc_cold) = {
   { 0, -1, sizeof(::problem::Matrix)},
   { 7, -1, sizeof(::problem::Location)},
   { 15, -1, sizeof(::problem::Service)},
-  { 29, -1, sizeof(::problem::Capacity)},
-  { 35, -1, sizeof(::problem::Vehicle)},
-  { 49, -1, sizeof(::problem::Solution)},
-  { 55, -1, sizeof(::problem::Problem)},
+  { 30, -1, sizeof(::problem::Capacity)},
+  { 36, -1, sizeof(::problem::Vehicle)},
+  { 50, -1, sizeof(::problem::Solution)},
+  { 56, -1, sizeof(::problem::Problem)},
 };
 
 static ::PROTOBUF_NAMESPACE_ID::Message const * const file_default_instances[] = {
@@ -249,24 +251,25 @@ const char descriptor_table_protodef_problem_2eproto[] PROTOBUF_SECTION_VARIABLE
   "\n\rproblem.proto\022\007problem\"0\n\006Matrix\022\020\n\004ti"
   "me\030\001 \003(\002B\002\020\001\022\024\n\010distance\030\002 \003(\002B\002\020\001\"E\n\010Lo"
   "cation\022\021\n\tlongitude\030\001 \001(\001\022\020\n\010latitude\030\002 "
-  "\001(\001\022\024\n\014matrix_index\030\003 \001(\r\"\315\001\n\007Service\022\022\n"
+  "\001(\001\022\024\n\014matrix_index\030\003 \001(\r\"\342\001\n\007Service\022\022\n"
   "\nquantities\030\001 \003(\002\022\020\n\010duration\030\002 \001(\002\022\024\n\014m"
   "atrix_index\030\003 \001(\r\022\"\n\032compatible_vehicle_"
   "indices\030\004 \003(\r\022\016\n\006skills\030\005 \003(\t\022\023\n\013day_ind"
   "ices\030\006 \003(\005\022#\n\010location\030\007 \001(\0132\021.problem.L"
-  "ocation\022\014\n\004name\030\t \001(\t\022\n\n\002id\030\n \001(\r\"\031\n\010Cap"
-  "acity\022\r\n\005limit\030\001 \001(\002\"\353\001\n\007Vehicle\022\014\n\004name"
-  "\030\001 \001(\t\022%\n\ncapacities\030\002 \003(\0132\021.problem.Cap"
-  "acity\022)\n\016start_location\030\004 \001(\0132\021.problem."
-  "Location\022\'\n\014end_location\030\005 \001(\0132\021.problem"
-  ".Location\022\020\n\010duration\030\006 \001(\001\022\023\n\013day_indic"
-  "es\030\007 \003(\005\022\024\n\014matrix_index\030\010 \001(\r\022\016\n\006skills"
-  "\030\t \003(\t\022\n\n\002id\030\n \001(\r\"\036\n\010Solution\022\022\n\nassign"
-  "ment\030\001 \003(\005\"\232\001\n\007Problem\022\"\n\010vehicles\030\001 \003(\013"
-  "2\020.problem.Vehicle\022\"\n\010services\030\002 \003(\0132\020.p"
-  "roblem.Service\022!\n\010matrices\030\003 \003(\0132\017.probl"
-  "em.Matrix\022$\n\tsolutions\030\004 \001(\0132\021.problem.S"
-  "olutionB\002H\001b\006proto3"
+  "ocation\022\014\n\004name\030\t \001(\t\022\n\n\002id\030\n \001(\r\022\023\n\013uni"
+  "t_labels\030\013 \003(\t\"\031\n\010Capacity\022\r\n\005limit\030\001 \001("
+  "\002\"\353\001\n\007Vehicle\022\014\n\004name\030\001 \001(\t\022%\n\ncapacitie"
+  "s\030\002 \003(\0132\021.problem.Capacity\022)\n\016start_loca"
+  "tion\030\004 \001(\0132\021.problem.Location\022\'\n\014end_loc"
+  "ation\030\005 \001(\0132\021.problem.Location\022\020\n\010durati"
+  "on\030\006 \001(\001\022\023\n\013day_indices\030\007 \003(\005\022\024\n\014matrix_"
+  "index\030\010 \001(\r\022\016\n\006skills\030\t \003(\t\022\n\n\002id\030\n \001(\r\""
+  "\036\n\010Solution\022\022\n\nassignment\030\001 \003(\005\"\257\001\n\007Prob"
+  "lem\022\"\n\010vehicles\030\001 \003(\0132\020.problem.Vehicle\022"
+  "\"\n\010services\030\002 \003(\0132\020.problem.Service\022!\n\010m"
+  "atrices\030\003 \003(\0132\017.problem.Matrix\022$\n\tsoluti"
+  "ons\030\004 \001(\0132\021.problem.Solution\022\023\n\013unit_lab"
+  "els\030\005 \003(\tB\002H\001b\006proto3"
   ;
 static const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable*const descriptor_table_problem_2eproto_deps[1] = {
 };
@@ -282,7 +285,7 @@ static ::PROTOBUF_NAMESPACE_ID::internal::SCCInfoBase*const descriptor_table_pro
 static ::PROTOBUF_NAMESPACE_ID::internal::once_flag descriptor_table_problem_2eproto_once;
 static bool descriptor_table_problem_2eproto_initialized = false;
 const ::PROTOBUF_NAMESPACE_ID::internal::DescriptorTable descriptor_table_problem_2eproto = {
-  &descriptor_table_problem_2eproto_initialized, descriptor_table_protodef_problem_2eproto, "problem.proto", 819,
+  &descriptor_table_problem_2eproto_initialized, descriptor_table_protodef_problem_2eproto, "problem.proto", 861,
   &descriptor_table_problem_2eproto_once, descriptor_table_problem_2eproto_sccs, descriptor_table_problem_2eproto_deps, 7, 0,
   schemas, file_default_instances, TableStruct_problem_2eproto::offsets,
   file_level_metadata_problem_2eproto, 7, file_level_enum_descriptors_problem_2eproto, file_level_service_descriptors_problem_2eproto,
@@ -781,7 +784,8 @@ Service::Service(const Service& from)
       quantities_(from.quantities_),
       compatible_vehicle_indices_(from.compatible_vehicle_indices_),
       skills_(from.skills_),
-      day_indices_(from.day_indices_) {
+      day_indices_(from.day_indices_),
+      unit_labels_(from.unit_labels_) {
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   name_.UnsafeSetDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
   if (!from._internal_name().empty()) {
@@ -835,6 +839,7 @@ void Service::Clear() {
   compatible_vehicle_indices_.Clear();
   skills_.Clear();
   day_indices_.Clear();
+  unit_labels_.Clear();
   name_.ClearToEmptyNoArena(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited());
   if (GetArenaNoVirtual() == nullptr && location_ != nullptr) {
     delete location_;
@@ -928,6 +933,18 @@ const char* Service::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::in
         if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 80)) {
           id_ = ::PROTOBUF_NAMESPACE_ID::internal::ReadVarint(&ptr);
           CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      // repeated string unit_labels = 11;
+      case 11:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 90)) {
+          ptr -= 1;
+          do {
+            ptr += 1;
+            ptr = ::PROTOBUF_NAMESPACE_ID::internal::InlineGreedyStringParserUTF8(_internal_add_unit_labels(), ptr, ctx, "problem.Service.unit_labels");
+            CHK_(ptr);
+            if (!ctx->DataAvailable(ptr)) break;
+          } while (::PROTOBUF_NAMESPACE_ID::internal::ExpectTag<90>(ptr));
         } else goto handle_unusual;
         continue;
       default: {
@@ -1025,6 +1042,16 @@ failure:
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::WriteUInt32ToArray(10, this->_internal_id(), target);
   }
 
+  // repeated string unit_labels = 11;
+  for (int i = 0, n = this->_internal_unit_labels_size(); i < n; i++) {
+    const auto& s = this->_internal_unit_labels(i);
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      s.data(), static_cast<int>(s.length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "problem.Service.unit_labels");
+    target = stream->WriteString(11, s, target);
+  }
+
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::InternalSerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields(), target, stream);
@@ -1092,6 +1119,14 @@ size_t Service::ByteSizeLong() const {
     _day_indices_cached_byte_size_.store(cached_size,
                                     std::memory_order_relaxed);
     total_size += data_size;
+  }
+
+  // repeated string unit_labels = 11;
+  total_size += 1 *
+      ::PROTOBUF_NAMESPACE_ID::internal::FromIntSize(unit_labels_.size());
+  for (int i = 0, n = unit_labels_.size(); i < n; i++) {
+    total_size += ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+      unit_labels_.Get(i));
   }
 
   // string name = 9;
@@ -1162,6 +1197,7 @@ void Service::MergeFrom(const Service& from) {
   compatible_vehicle_indices_.MergeFrom(from.compatible_vehicle_indices_);
   skills_.MergeFrom(from.skills_);
   day_indices_.MergeFrom(from.day_indices_);
+  unit_labels_.MergeFrom(from.unit_labels_);
   if (from.name().size() > 0) {
 
     name_.AssignWithDefault(&::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(), from.name_);
@@ -1205,6 +1241,7 @@ void Service::InternalSwap(Service* other) {
   compatible_vehicle_indices_.InternalSwap(&other->compatible_vehicle_indices_);
   skills_.InternalSwap(&other->skills_);
   day_indices_.InternalSwap(&other->day_indices_);
+  unit_labels_.InternalSwap(&other->unit_labels_);
   name_.Swap(&other->name_, &::PROTOBUF_NAMESPACE_ID::internal::GetEmptyStringAlreadyInited(),
     GetArenaNoVirtual());
   swap(location_, other->location_);
@@ -2089,7 +2126,8 @@ Problem::Problem(const Problem& from)
       _internal_metadata_(nullptr),
       vehicles_(from.vehicles_),
       services_(from.services_),
-      matrices_(from.matrices_) {
+      matrices_(from.matrices_),
+      unit_labels_(from.unit_labels_) {
   _internal_metadata_.MergeFrom(from._internal_metadata_);
   if (from._internal_has_solutions()) {
     solutions_ = new ::problem::Solution(*from.solutions_);
@@ -2131,6 +2169,7 @@ void Problem::Clear() {
   vehicles_.Clear();
   services_.Clear();
   matrices_.Clear();
+  unit_labels_.Clear();
   if (GetArenaNoVirtual() == nullptr && solutions_ != nullptr) {
     delete solutions_;
   }
@@ -2186,6 +2225,18 @@ const char* Problem::_InternalParse(const char* ptr, ::PROTOBUF_NAMESPACE_ID::in
         if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 34)) {
           ptr = ctx->ParseMessage(_internal_mutable_solutions(), ptr);
           CHK_(ptr);
+        } else goto handle_unusual;
+        continue;
+      // repeated string unit_labels = 5;
+      case 5:
+        if (PROTOBUF_PREDICT_TRUE(static_cast<::PROTOBUF_NAMESPACE_ID::uint8>(tag) == 42)) {
+          ptr -= 1;
+          do {
+            ptr += 1;
+            ptr = ::PROTOBUF_NAMESPACE_ID::internal::InlineGreedyStringParserUTF8(_internal_add_unit_labels(), ptr, ctx, "problem.Problem.unit_labels");
+            CHK_(ptr);
+            if (!ctx->DataAvailable(ptr)) break;
+          } while (::PROTOBUF_NAMESPACE_ID::internal::ExpectTag<42>(ptr));
         } else goto handle_unusual;
         continue;
       default: {
@@ -2246,6 +2297,16 @@ failure:
         4, _Internal::solutions(this), target, stream);
   }
 
+  // repeated string unit_labels = 5;
+  for (int i = 0, n = this->_internal_unit_labels_size(); i < n; i++) {
+    const auto& s = this->_internal_unit_labels(i);
+    ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::VerifyUtf8String(
+      s.data(), static_cast<int>(s.length()),
+      ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::SERIALIZE,
+      "problem.Problem.unit_labels");
+    target = stream->WriteString(5, s, target);
+  }
+
   if (PROTOBUF_PREDICT_FALSE(_internal_metadata_.have_unknown_fields())) {
     target = ::PROTOBUF_NAMESPACE_ID::internal::WireFormat::InternalSerializeUnknownFieldsToArray(
         _internal_metadata_.unknown_fields(), target, stream);
@@ -2281,6 +2342,14 @@ size_t Problem::ByteSizeLong() const {
   for (const auto& msg : this->matrices_) {
     total_size +=
       ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::MessageSize(msg);
+  }
+
+  // repeated string unit_labels = 5;
+  total_size += 1 *
+      ::PROTOBUF_NAMESPACE_ID::internal::FromIntSize(unit_labels_.size());
+  for (int i = 0, n = unit_labels_.size(); i < n; i++) {
+    total_size += ::PROTOBUF_NAMESPACE_ID::internal::WireFormatLite::StringSize(
+      unit_labels_.Get(i));
   }
 
   // .problem.Solution solutions = 4;
@@ -2324,6 +2393,7 @@ void Problem::MergeFrom(const Problem& from) {
   vehicles_.MergeFrom(from.vehicles_);
   services_.MergeFrom(from.services_);
   matrices_.MergeFrom(from.matrices_);
+  unit_labels_.MergeFrom(from.unit_labels_);
   if (from.has_solutions()) {
     _internal_mutable_solutions()->::problem::Solution::MergeFrom(from._internal_solutions());
   }
@@ -2353,6 +2423,7 @@ void Problem::InternalSwap(Problem* other) {
   vehicles_.InternalSwap(&other->vehicles_);
   services_.InternalSwap(&other->services_);
   matrices_.InternalSwap(&other->matrices_);
+  unit_labels_.InternalSwap(&other->unit_labels_);
   swap(solutions_, other->solutions_);
 }
 

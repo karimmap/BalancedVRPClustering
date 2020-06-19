@@ -24,7 +24,7 @@ message Service {
   Location location = 7;
   string name = 9;
   uint32 id = 10;
-
+  repeated string unit_labels = 11;
 }
 
 message Capacity {
@@ -51,4 +51,5 @@ message Problem {
   repeated Service services = 2;
   repeated Matrix matrices = 3;
   Solution solutions = 4;
+  repeated string unit_labels = 5;
 }
