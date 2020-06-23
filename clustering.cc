@@ -95,6 +95,8 @@ namespace operations_research {
     //   } cout << endl;
     //   cout << " metric " << metric_limits[i] << endl;
     // }
+    double projection_scaler = check_if_projection_inside_the_line_segment(problem.services(0).location(),problem.services(1).location(),problem.services(5).location(), 0.8 );
+    cout << " scaler " << projection_scaler << endl;
   }
 } // namespace operations_research
 

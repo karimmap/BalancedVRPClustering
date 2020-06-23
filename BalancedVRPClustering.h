@@ -178,3 +178,39 @@ auto flaying_distance(const problem::Location &loc_a,const problem::Location &lo
   return r * 2 * atan2 (sqrt(intermediate),sqrt( 1 - intermediate));
 }
 
+auto check_if_projection_inside_the_line_segment(const problem::Location &point_coord,const problem::Location &line_beg_coord,const problem::Location &line_end_coord, double margin ) -> double
+{
+  /*
+   * margin: if (0 > margin > 1), the percentage of the line segment that will be considered as "outside"
+   * margin: if (margin < 0), the percentage that the "inside" zone is extended
+   * [0, 1]: coordinates [lat, lon] or [lon, lat]
+   */
+   std::pair<double,double> line_direction;
+   line_direction.first = line_end_coord.latitude() - line_beg_coord.latitude();
+   line_direction.second = line_end_coord.longitude() - line_beg_coord.longitude();
+
+   std::pair<double,double> point_direction;
+   point_direction.first = point_coord.latitude() - line_beg_coord.latitude();
+   point_direction.second = point_coord.longitude() - line_beg_coord.longitude();
+
+   std::pair<double,double> projection_scaler_coord;
+   projection_scaler_coord.first = line_direction.first * point_direction.first / pow(line_direction.first,2);
+   projection_scaler_coord.second = line_direction.second * point_direction.second / pow(line_direction.second,2);
+   /*
+   * If projection_scaler
+   * >1:        the projection is after the line segment end
+   * <0:        it is before the line segment begin
+   * otherwise: it is on the line segment define by begin_coord end end_coord
+   */
+   double projection_scaler = projection_scaler_coord.first + projection_scaler_coord.second;
+   // If the following holds, it is inside the margin of the line segment
+   if(projection_scaler >= 0.5 * margin && projection_scaler <= 1 - 0.5 * margin) return projection_scaler;
+
+
+}
+
+/*
+ *
+ * ***************************Classe BalancedVRPClustering************************************
+ * 
+ */
