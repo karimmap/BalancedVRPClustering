@@ -78,13 +78,23 @@ namespace operations_research {
     // {
     //   cout << duration_from_and_to_depot[i.id()] << endl;
     // }
-    for (auto service : problem.services())
-      cout << service.ShortDebugString() << endl;
-    cout << endl; cout << endl;
-    for (auto service : problem.vehicles())
-      cout << service.ShortDebugString() << endl;
-    double cut_ratio;
-    Compute_limits(problem,cut_ratio);
+    // for (auto service : problem.services())
+    //   cout << service.ShortDebugString() << endl;
+    // cout << endl; cout << endl;
+    // for (auto service : problem.vehicles())
+    //   cout << service.ShortDebugString() << endl;
+    double cut_ratio = 0.9;
+    double dist = Euclidean_distance(problem.services(0).location(), problem.services(1).location());
+    double dist1 = flaying_distance(problem.services(0).location(), problem.services(1).location());
+    cout << " dist " << dist << " " << dist1 << endl;
+    std::vector<Strict_limit* > strict_limits ; std::vector<double> metric_limits;
+    Compute_limits("kg",problem,cut_ratio,strict_limits,metric_limits);
+    // for(int i = 0; i < strict_limits.size(); ++i){
+    //   for(int j = 0; j < strict_limits[i] -> limit.size(); ++j){
+    //     cout << "  "<< strict_limits[i] -> limit[j];
+    //   } cout << endl;
+    //   cout << " metric " << metric_limits[i] << endl;
+    // }
   }
 } // namespace operations_research
 

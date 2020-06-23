@@ -9,6 +9,14 @@
 
 #define PI 3.14159265
 
+double Max = std::numeric_limits<double>::max();
+struct Strict_limit
+{
+  std::vector<double> limit;
+  Strict_limit();
+  Strict_limit(std::vector<double> _limit):limit(_limit){};
+};
+
 auto compatibleVehicle(problem::Problem& problem) -> void
 {
   for (int i = 0; i < problem.services_size(); ++i) {
@@ -78,45 +86,95 @@ auto Compute_distance_from_and_to_depot(problem::Problem& problem) -> std::vecto
   return duration_from_and_to_depot;
 }
 
-auto Compute_limits(problem::Problem& problem, double cut_ratio) -> void
+auto none(problem::Problem& problem) -> bool
+{
+    bool is_empty = true;
+    for( auto i:problem.vehicles()){
+        if(!(i.capacities().empty())) {
+            is_empty = false;
+        }
+        break;
+    }
+    return is_empty;
+}
+auto get_metric_index(problem::Problem& problem, std::string cut_symbol) -> int
+{
+  for(int i = 0; i < problem.unit_labels_size(); ++i){
+    if(cut_symbol == problem.unit_labels(i)){
+      return i;
+      break;
+    }
+  }
+  return -1;
+}
+auto Compute_limits(std::string cut_symbol,problem::Problem& problem, double cut_ratio,std::vector<Strict_limit* > &strict_limits,std::vector<double> &metric_limits ) -> void
 {
     for( int u = 0; u < problem.services(0).unit_labels_size();++u){
+        auto add = problem.mutable_unit_labels();
         problem.add_unit_labels(problem.services(0).unit_labels(u));
     }
 
+    std::vector<double> cumulated_metrics(problem.unit_labels_size(),0);
 
-    for(int i = 0; i < problem.unit_labels_size(); ++i){
-        std::cout << problem.unit_labels(i) << std::endl;
+    for(int u = 0; u < problem.services(0).quantities_size(); ++u){
+        for(auto i:problem.services()){
+            cumulated_metrics[u] +=  i.quantities(u);
+        }
     }
+    strict_limits.resize(problem.vehicles_size());
+    if(none(problem)) std::cout << " no vehicle has capacities :-> \t strict_limits is empty " << std::endl;
+    else{
+        for(auto i:problem.vehicles()){
+          std::vector<double> temp;
+            for(int u = 0; u < cumulated_metrics.size(); u++){
+              double val = i.capacities(u).limit();
+              if (val != -1) temp.push_back(val);
+              else {
+                temp.push_back(Max);
+              }
+            }
+            strict_limits[i.id()] = new Strict_limit(temp);
+        }
+    }
+
+    double total_work_time = 0.0;
+    for(auto k: problem.vehicles()){
+        total_work_time += k.duration();
+    }
+    metric_limits.resize(problem.vehicles_size());
+    if(total_work_time > 0.0){
+      for(auto i:problem.vehicles()){
+        int index = get_metric_index(problem,cut_symbol);
+        if(index != -1) metric_limits[i.id()] = cut_ratio * (cumulated_metrics[index] * i.duration()) / total_work_time;
+      }
+    }
+    else{
+      for(auto i:problem.vehicles()){
+        int index = get_metric_index(problem,cut_symbol);
+        if(index != -1) metric_limits[i.id()] = cut_ratio * (cumulated_metrics[index]) / problem.vehicles_size();
+      }
+    }
+
 }
-//  def compute_limits(cut_symbol, cut_ratio, vehicles_infos, data_items, entity = :vehicle)
-//     cumulated_metrics = Hash.new(0)
 
-//     (@unit_symbols || [cut_symbol]).each{ |unit|
-//       cumulated_metrics[unit] = data_items.collect{ |item| item[3][unit] || 0 }.reduce(&:+)
-//     }
+auto flaying_distance(const problem::Location &loc_a,const problem::Location &loc_b) -> double
+{
+  if(!(loc_a.latitude())  && !(loc_b.latitude()) ) return 0.0;
+  if(abs(loc_a.latitude() - loc_b.latitude()) < 30 && (std::max(loc_a.latitude(),loc_b.latitude()) +abs(loc_a.longitude() - loc_b.longitude())) < 100) {
+  //       These limits ensures that relative error cannot be much greather than 2%
+  //       For a distance like Bordeaux - Berlin, relative error between
+  //       euclidean_distance and flying_distance is 0.1%.
+  //       That is no need for trigonometric calculation.
+  return Euclidean_distance(loc_a,loc_b);
+  }
+  double r = 6378137; // Earth's radius in meters
+  double deg2rad_lat_a = loc_a.latitude() * PI / 180;
+  double deg2rad_lat_b = loc_b.latitude() * PI / 180;
+  double deg2rad_lon_a = loc_a.longitude() * PI / 180;
+  double deg2rad_lon_b = loc_b.longitude() * PI / 180;
+  double lat_distance = deg2rad_lat_b - deg2rad_lat_a;
+  double lon_distance = deg2rad_lon_b - deg2rad_lon_a;
+  double intermediate = pow(sin(lat_distance / 2),2) + cos(deg2rad_lat_a) * cos(deg2rad_lat_b) * pow(sin(lon_distance / 2),2);
+  return r * 2 * atan2 (sqrt(intermediate),sqrt( 1 - intermediate));
+}
 
-//     strict_limits = if vehicles_infos.none?{ |v_i| v_i[:capacities] }
-//       []
-//     else
-//       vehicles_infos.collect{ |cluster|
-//         s_l = { duration: cluster[:total_work_time], visits: cumulated_metrics[:visits] }
-//         cumulated_metrics.each{ |unit, _total_metric|
-//           s_l[unit] = ((cluster[:capacities].has_key? unit) ? cluster[:capacities][unit] : 0)
-//         }
-//         s_l
-//       }
-//     end
-
-//     total_work_time = vehicles_infos.map{ |cluster| cluster[:total_work_time] }.reduce(&:+).to_f
-//     metric_limits = if entity == :vehicle && total_work_time.positive?
-//       vehicles_infos.collect{ |cluster|
-//         { limit: cut_ratio * (cumulated_metrics[cut_symbol].to_f * (cluster[:total_work_time] / total_work_time)) }
-//       }
-//     else
-//       { limit: cut_ratio * (cumulated_metrics[cut_symbol] / vehicles_infos.size) }
-//     end
-
-//     [strict_limits, metric_limits]
-//   end
-// end
