@@ -87,16 +87,16 @@ namespace operations_research {
     double dist = Euclidean_distance(problem.services(0).location(), problem.services(1).location());
     double dist1 = flaying_distance(problem.services(0).location(), problem.services(1).location());
     cout << " dist " << dist << " " << dist1 << endl;
-    std::vector<Strict_limit* > strict_limits ; std::vector<double> metric_limits;
-    Compute_limits("kg",problem,cut_ratio,strict_limits,metric_limits);
-    // for(int i = 0; i < strict_limits.size(); ++i){
-    //   for(int j = 0; j < strict_limits[i] -> limit.size(); ++j){
-    //     cout << "  "<< strict_limits[i] -> limit[j];
-    //   } cout << endl;
-    //   cout << " metric " << metric_limits[i] << endl;
-    // }
+    vector<double> metric_limits;
+    vector<double> cumulated_metrics;
+    Compute_limits(0,problem,cut_ratio,metric_limits,cumulated_metrics);
+    for(int i = 0; i < metric_limits.size(); ++i){
+      cout << " metric " << metric_limits[i] << endl;
+    }
     double projection_scaler = check_if_projection_inside_the_line_segment(problem.services(0).location(),problem.services(1).location(),problem.services(5).location(), 0.8 );
     cout << " scaler " << projection_scaler << endl;
+    BalancedVRPClustering pro(problem,cut_ratio,0);
+    pro.build(problem,cut_ratio,0);
   }
 } // namespace operations_research
 

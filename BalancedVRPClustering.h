@@ -7,15 +7,12 @@
 
 #include <math.h>       /* cos */
 
+#include "InvalidMoveException.h"
+#include<list>
+
 #define PI 3.14159265
 
 double Max = std::numeric_limits<double>::max();
-struct Strict_limit
-{
-  std::vector<double> limit;
-  Strict_limit();
-  Strict_limit(std::vector<double> _limit):limit(_limit){};
-};
 
 auto compatibleVehicle(problem::Problem& problem) -> void
 {
@@ -51,6 +48,7 @@ auto compatibleVehicle(problem::Problem& problem) -> void
     service -> set_id(i);
   }
 }
+
 auto Euclidean_distance(const problem::Location &loc_a,const problem::Location &loc_b) -> double
 {
    double delta_lat = loc_a.latitude() - loc_b.latitude();
@@ -59,7 +57,7 @@ auto Euclidean_distance(const problem::Location &loc_a,const problem::Location &
    return 111321 * sqrt(pow(delta_lat,2) + pow(delta_lon,2)); //111321 is the length of a degree (of lon and lat) in meters
 }
 
-auto Compute_distance_from_and_to_depot(problem::Problem& problem) -> std::vector<double>
+auto Compute_distance_from_and_to_depot(problem::Problem problem) -> std::vector<double>
 {
   std::vector<double> duration_from_and_to_depot(problem.services_size());
   std::vector<double> time_matrix_from_depot(problem.services_size());
@@ -86,7 +84,7 @@ auto Compute_distance_from_and_to_depot(problem::Problem& problem) -> std::vecto
   return duration_from_and_to_depot;
 }
 
-auto none(problem::Problem& problem) -> bool
+auto none(problem::Problem problem) -> bool
 {
     bool is_empty = true;
     for( auto i:problem.vehicles()){
@@ -97,43 +95,19 @@ auto none(problem::Problem& problem) -> bool
     }
     return is_empty;
 }
-auto get_metric_index(problem::Problem& problem, std::string cut_symbol) -> int
-{
-  for(int i = 0; i < problem.unit_labels_size(); ++i){
-    if(cut_symbol == problem.unit_labels(i)){
-      return i;
-      break;
-    }
-  }
-  return -1;
-}
-auto Compute_limits(std::string cut_symbol,problem::Problem& problem, double cut_ratio,std::vector<Strict_limit* > &strict_limits,std::vector<double> &metric_limits ) -> void
+
+auto Compute_limits(int cut_index,problem::Problem &problem, double cut_ratio,std::vector<double> &metric_limits,std::vector<double> &cumulated_metrics ) -> void
 {
     for( int u = 0; u < problem.services(0).unit_labels_size();++u){
         auto add = problem.mutable_unit_labels();
         problem.add_unit_labels(problem.services(0).unit_labels(u));
     }
 
-    std::vector<double> cumulated_metrics(problem.unit_labels_size(),0);
+    cumulated_metrics.resize(problem.unit_labels_size());
 
     for(int u = 0; u < problem.services(0).quantities_size(); ++u){
         for(auto i:problem.services()){
             cumulated_metrics[u] +=  i.quantities(u);
-        }
-    }
-    strict_limits.resize(problem.vehicles_size());
-    if(none(problem)) std::cout << " no vehicle has capacities :-> \t strict_limits is empty " << std::endl;
-    else{
-        for(auto i:problem.vehicles()){
-          std::vector<double> temp;
-            for(int u = 0; u < cumulated_metrics.size(); u++){
-              double val = i.capacities(u).limit();
-              if (val != -1) temp.push_back(val);
-              else {
-                temp.push_back(Max);
-              }
-            }
-            strict_limits[i.id()] = new Strict_limit(temp);
         }
     }
 
@@ -142,19 +116,21 @@ auto Compute_limits(std::string cut_symbol,problem::Problem& problem, double cut
         total_work_time += k.duration();
     }
     metric_limits.resize(problem.vehicles_size());
-    if(total_work_time > 0.0){
-      for(auto i:problem.vehicles()){
-        int index = get_metric_index(problem,cut_symbol);
-        if(index != -1) metric_limits[i.id()] = cut_ratio * (cumulated_metrics[index] * i.duration()) / total_work_time;
+    for(auto i:problem.vehicles()){
+      switch (cut_index)
+      {
+      case 0: metric_limits[i.id()] = cut_ratio * cumulated_metrics[cut_index] / problem.vehicles_size();
+        break;
+      case 1: metric_limits[i.id()] = cut_ratio * cumulated_metrics[cut_index] / problem.vehicles_size();
+        break;
+      case 2: metric_limits[i.id()] = cut_ratio * cumulated_metrics[cut_index] / problem.vehicles_size();
+        break;
+      case 3: metric_limits[i.id()] = cut_ratio * cumulated_metrics[cut_index] / problem.vehicles_size();
+        break;
+      default: metric_limits[i.id()] = cut_ratio * i.duration() / total_work_time;
+        break;
       }
     }
-    else{
-      for(auto i:problem.vehicles()){
-        int index = get_metric_index(problem,cut_symbol);
-        if(index != -1) metric_limits[i.id()] = cut_ratio * (cumulated_metrics[index]) / problem.vehicles_size();
-      }
-    }
-
 }
 
 auto flaying_distance(const problem::Location &loc_a,const problem::Location &loc_b) -> double
@@ -209,8 +185,133 @@ auto check_if_projection_inside_the_line_segment(const problem::Location &point_
 
 }
 
+auto item_nil(problem::Problem problem) -> bool
+{
+  for(auto i:problem.services()){
+    if(i.quantities_size() == 0) return true;
+  }
+  return false;
+}
+
+auto Check_vehicle_location(problem::Problem problem) -> bool
+{
+  for(auto i:problem.vehicles()){
+    if(i.start_location().latitude()  || i.start_location().longitude() ) return false;
+  }
+  return true;
+}
+
+auto Check_service_location(problem::Problem problem) -> bool
+{
+  for(auto i:problem.services()){
+    if(i.location().latitude() || i.location().longitude() ) return false;
+  }
+  return true;
+}
 /*
  *
  * ***************************Classe BalancedVRPClustering************************************
- * 
+ *
  */
+
+class BalancedVRPClustering
+{
+  public:
+    problem::Problem const _problem;
+    double const _cut_ratio;
+    int const _cut_index;
+
+    BalancedVRPClustering();
+    BalancedVRPClustering(problem::Problem const problem, double const cut_ratio, int const cut_index);
+    void build(problem::Problem  problem, double const cut_ratio, int const cut_index);
+
+};
+
+BalancedVRPClustering::BalancedVRPClustering(problem::Problem const problem, double const cut_ratio, int const cut_index):_problem(problem),_cut_ratio(cut_ratio),_cut_index(cut_index){}
+
+auto BalancedVRPClustering::build(problem::Problem  problem, double const cut_ratio, int const cut_index) -> void
+{
+ try{
+   //return clean errors if unconsistent data
+  if(item_nil(problem)){
+    throw InvalidMoveException("Error: \t unit should be provided for all item");
+  }
+  else if(Check_vehicle_location(problem) ){
+    throw InvalidMoveException("Location info (lattitude and longitude) should be provided for all vehicles");
+  }
+  else if(Check_service_location(problem)){
+    throw InvalidMoveException("Location info (lattitude and longitude) should be provided for all items");
+  }
+
+  int max_iteration;
+  if(problem.options().max_iteration() != 0) max_iteration = problem.options().max_iteration();
+  else max_iteration = std::max(0.5 * problem.services_size(), 100.0);
+
+  std::vector<double> distance_from_and_to_depot;
+  if( cut_index > 3 || cut_index < 0) distance_from_and_to_depot = Compute_distance_from_and_to_depot(problem); // case: duration
+  std::vector<double> cut_limit;
+  std::vector<double> cumulated_metrics;
+  Compute_limits(cut_index,problem, cut_ratio,cut_limit,cumulated_metrics);
+
+  // *** Algo start ****//
+  int iteration = 0;
+  std::vector<int> i_like_to_move_it_move_it;
+  int moved_up = 0;
+  int moved_down = 0;
+  std::vector<double>cluster_with_capacity_violation;
+  std::vector<problem::Service const *> data_items;// services to be ordered by ascending quantities[cut_index]
+  for(auto i:problem.services()){
+    data_items.push_back(&problem.services(i.id()));
+  }
+  std::sort(data_items.begin(),data_items.end(),[ ](const problem::Service * service1 , const problem::Service * service2){
+    if( service1 -> quantities(0) < service2 -> quantities(0))
+     return false;
+  });
+
+  if(cut_index <= 3 && cut_index >= 0){
+    if(cumulated_metrics[cut_index] == 0.0){
+      std::cout << "Disable balancing because there is no point" << std::endl;
+    }
+    else{
+        switch (cut_index)
+        {
+        case 0:
+          std::sort(data_items.begin(),data_items.end(),[ ](const problem::Service * service1 , const problem::Service * service2){
+            if( service1 -> quantities(0) < service2 -> quantities(0))
+              return false;
+            });
+          break;
+        case 1:
+          std::sort(data_items.begin(),data_items.end(),[ ](const problem::Service * service1 , const problem::Service * service2){
+            if( service1 -> quantities(1) < service2 -> quantities(1))
+              return false;
+            });
+          break;
+        case 2:
+          std::sort(data_items.begin(),data_items.end(),[ ](const problem::Service * service1 , const problem::Service * service2){
+            if( service1 -> quantities(2) < service2 -> quantities(2))
+              return false;
+            });
+          break;
+        case 3:
+           std::sort(data_items.begin(),data_items.end(),[ ](const problem::Service * service1 , const problem::Service * service2){
+            if( service1 -> quantities(3) < service2 -> quantities(3))
+              return false;
+            });
+           break;
+        }
+
+        std::random_shuffle(data_items.begin(), data_items.end());
+
+
+    }
+  }
+
+  for(int i = 0; i < data_items.size(); ++i){
+    cout << " "<< data_items[i] -> quantities(0) << endl;
+  }
+
+ }catch(exception &e){
+   std::cout << e.what() << std::endl;
+ }
+}
