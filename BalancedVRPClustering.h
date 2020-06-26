@@ -117,19 +117,10 @@ auto Compute_limits(int cut_index,problem::Problem &problem, double cut_ratio,st
     }
     metric_limits.resize(problem.vehicles_size());
     for(auto i:problem.vehicles()){
-      switch (cut_index)
-      {
-      case 0: metric_limits[i.id()] = cut_ratio * cumulated_metrics[cut_index] / problem.vehicles_size();
-        break;
-      case 1: metric_limits[i.id()] = cut_ratio * cumulated_metrics[cut_index] / problem.vehicles_size();
-        break;
-      case 2: metric_limits[i.id()] = cut_ratio * cumulated_metrics[cut_index] / problem.vehicles_size();
-        break;
-      case 3: metric_limits[i.id()] = cut_ratio * cumulated_metrics[cut_index] / problem.vehicles_size();
-        break;
-      default: metric_limits[i.id()] = cut_ratio * i.duration() / total_work_time;
-        break;
+      if( cut_index > problem.unit_labels_size()){
+        metric_limits[i.id()] = cut_ratio * i.duration() / total_work_time;
       }
+      else metric_limits[i.id()] = cut_ratio * cumulated_metrics[cut_index] / problem.vehicles_size();
     }
 }
 
@@ -273,33 +264,12 @@ auto BalancedVRPClustering::build(problem::Problem  problem, double const cut_ra
       std::cout << "Disable balancing because there is no point" << std::endl;
     }
     else{
-        switch (cut_index)
-        {
-        case 0:
-          std::sort(data_items.begin(),data_items.end(),[ ](const problem::Service * service1 , const problem::Service * service2){
-            if( service1 -> quantities(0) < service2 -> quantities(0))
+      if( cut_index < problem.unit_labels_size()){
+        std::sort(data_items.begin(),data_items.end(),[cut_index](const problem::Service * service1 , const problem::Service * service2){
+            if( service1 -> quantities(cut_index) < service2 -> quantities(cut_index))
               return false;
             });
-          break;
-        case 1:
-          std::sort(data_items.begin(),data_items.end(),[ ](const problem::Service * service1 , const problem::Service * service2){
-            if( service1 -> quantities(1) < service2 -> quantities(1))
-              return false;
-            });
-          break;
-        case 2:
-          std::sort(data_items.begin(),data_items.end(),[ ](const problem::Service * service1 , const problem::Service * service2){
-            if( service1 -> quantities(2) < service2 -> quantities(2))
-              return false;
-            });
-          break;
-        case 3:
-           std::sort(data_items.begin(),data_items.end(),[ ](const problem::Service * service1 , const problem::Service * service2){
-            if( service1 -> quantities(3) < service2 -> quantities(3))
-              return false;
-            });
-           break;
-        }
+      }
 
         std::random_shuffle(data_items.begin() + int(data_items.size() * 0.1), data_items.begin() + int(data_items.size() * 0.9));
     }
