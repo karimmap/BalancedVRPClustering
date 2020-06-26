@@ -46,10 +46,15 @@ message Vehicle {
 message Solution {
   repeated int32 assignment = 1;
 }
+message Options{
+  uint32 max_iteration = 1;
+
+}
 message Problem {
   repeated Vehicle vehicles = 1;
   repeated Service services = 2;
   repeated Matrix matrices = 3;
   Solution solutions = 4;
   repeated string unit_labels = 5;
+  Options options = 6;
 }

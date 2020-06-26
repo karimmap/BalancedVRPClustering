@@ -301,9 +301,7 @@ auto BalancedVRPClustering::build(problem::Problem  problem, double const cut_ra
            break;
         }
 
-        std::random_shuffle(data_items.begin(), data_items.end());
-
-
+        std::random_shuffle(data_items.begin() + int(data_items.size() * 0.1), data_items.begin() + int(data_items.size() * 0.9));
     }
   }
 

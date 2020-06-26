@@ -1,5 +1,5 @@
 
-OR_TOOLS_TOP=../or-tools_N
+OR_TOOLS_TOP=../or-tools
 
 FLANN_MASTER_TOP = ../flann
 
