@@ -4,16 +4,14 @@
 #include <exception>
 using namespace std;
 
-class InvalidMoveException: public exception {
+class InvalidMoveException : public exception {
 private:
-		string msg;
+  string msg;
+
 public:
-		InvalidMoveException(const string& msg):
-		msg(msg){}
-		virtual const char* what() const throw(){
-		return msg.c_str();
-	}
-	~InvalidMoveException() throw(){}
+  InvalidMoveException(const string& msg) : msg(msg) {}
+  virtual const char* what() const throw() { return msg.c_str(); }
+  ~InvalidMoveException() throw() {}
 };
 
 #endif

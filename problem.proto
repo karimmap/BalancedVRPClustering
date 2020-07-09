@@ -23,8 +23,6 @@ message Service {
   repeated int32 day_indices = 6;
   Location location = 7;
   string name = 9;
-  uint32 id = 10;
-  repeated string unit_labels = 11;
 }
 
 message Capacity {
@@ -37,10 +35,13 @@ message Vehicle {
   Location start_location = 4;
   Location end_location = 5;
   double duration = 6;
-  repeated int32 day_indices = 7;
+  repeated int32 day_indices = 7; //skill_OR
   uint32 matrix_index = 8;
-  repeated string skills = 9;
-  uint32 id = 10;
+  repeated string skills = 9; //skill_AND
+  repeated float load = 11;
+  double metric_limit = 12;
+  Location centroid = 13;
+  repeated uint32 assigned_service_indices = 14;
 
 }
 message Solution {
@@ -57,4 +58,5 @@ message Problem {
   Solution solutions = 4;
   repeated string unit_labels = 5;
   Options options = 6;
+  double cumulated_metric = 7;
 }
